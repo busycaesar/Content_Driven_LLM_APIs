@@ -1,11 +1,13 @@
-from flask import Flask, jsonify
+from flask import Flask
 from env_variable import port
+from flask_cors import CORS
 
 # Import all the routes.
 from routes import routes
 
 # Initiate a Flask application.
 app = Flask(__name__)
+CORS(app)
 
 # Register the blueprint of all the routes.
 # API calls for the assigned url prefix will be redirected to the routes.
