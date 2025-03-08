@@ -16,6 +16,7 @@ dataclasses-json==0.6.7
 dill==0.3.9
 distro==1.9.0
 Flask==3.1.0
+flask-cors==5.0.1
 frozenlist==1.5.0
 google-ai-generativelanguage==0.6.10
 google-api-core==2.23.0
