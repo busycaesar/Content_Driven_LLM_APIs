@@ -1,8 +1,7 @@
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_text_splitters import CharacterTextSplitter
 import os
 from dotenv import load_dotenv
 from langchain.schema import Document
-from langchain_community.vectorstores import FAISS
 from db.db import get_vector_store
 
 load_dotenv()
@@ -14,12 +13,13 @@ async def add_new_content(content, gemini_api_keys):
     content = Document(page_content=content)
     
     # Initiate the text splitter.
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+    text_splitter = CharacterTextSplitter(
+        separator="=========================",
+        is_separator_regex=False
+    )
     
     # Using the text splitter, split the content into chunks by passing the converted content.
     documents = text_splitter.split_documents([content])
-    
-    print(documents)
 
     vector_store = get_vector_store(gemini_api_keys)
 
@@ -44,10 +44,10 @@ async def get_relevant_chunk(prompt, gemini_api_keys):
 
     if not vector_store: return
 
-    docs = vector_store.similarity_search(prompt, k=4)
+    docs = vector_store.similarity_search(prompt, k=2)
 
     relevant_chunk = " ".join([d.page_content for d in docs])
 
     print(relevant_chunk)
 
-    return relevant_chunk
+    return relevant_chunk or ""

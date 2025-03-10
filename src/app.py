@@ -7,7 +7,7 @@ from routes import routes
 
 # Initiate a Flask application.
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": ["http://localhost:3000"]}})
 
 # Register the blueprint of all the routes.
 # API calls for the assigned url prefix will be redirected to the routes.
