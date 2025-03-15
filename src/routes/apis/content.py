@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from view.response import response
+from routes.response import response
 from db import add_new_content#, get_content, put_content, delete_content
 
 content_apis = Blueprint("content_apis", __name__)

@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from view.response import response
+from routes.response import response
 from db import get_relevant_chunk
 from llm import generate_response
 
