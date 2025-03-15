@@ -29,3 +29,8 @@
 
 - PUT `/api/content_model/:contentId`: Add a specific model for the content.
 - GET `/api/content_model/:contentId`: Get the model stored for the content.
+
+## Conversation
+
+- POST `/api/conversation`: Generates the response to the prompt.
+- GET `/api/conversation`: Get the conversation history.
