@@ -3,7 +3,7 @@ from env_variable import port
 from flask_cors import CORS
 
 # Import all the routes.
-from routes import routes
+from view import routes
 
 # Initiate a Flask application.
 app = Flask(__name__)
