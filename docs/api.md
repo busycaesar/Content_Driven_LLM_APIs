@@ -33,4 +33,4 @@
 ## Conversation
 
 - POST `/api/conversation`: Generates the response to the prompt.
-- GET `/api/conversation`: Get the conversation history.
+- GET `/api/conversation/:conversationId`: Get the conversation history.
