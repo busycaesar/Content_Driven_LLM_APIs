@@ -1,7 +1,7 @@
 # PromptlicityAI
 
 <p align="center">
-  <img src="./assets/PromptlicityAI.png" width="75%" />
+  <img src="./assets/PromptlicityAI.png" />
 </p>
 
 ## Description
