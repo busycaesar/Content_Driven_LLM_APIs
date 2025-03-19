@@ -1,0 +1,35 @@
+name: Convert .drawio to PNG
+
+on:
+  push:
+    paths:
+      - "DBSchema.drawio"
+  workflow_dispatch:
+
+jobs:
+  convert_drawio_to_png:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install drawio
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xdg-utils libgtk2.0-0 libgdk-pixbuf2.0-0 libxtst6 libx11-xcb1 libnss3 libasound2 libnspr4
+          wget https://github.com/jgraph/drawio-desktop/releases/download/v20.5.4/draw.io-amd64-20.5.4.deb
+          sudo dpkg -i draw.io-amd64-20.5.4.deb
+          sudo apt-get install -f  # Fix missing dependencies if any
+
+      - name: Convert .drawio to PNG
+        run: |
+          for file in $(find . -name '*.drawio'); do
+            /usr/share/drawio/drawio --export --format png --output ${file%.drawio}.png $file
+          done
+
+      - name: Commit PNG files
+        run: |
+          git add '*.png'
+          git commit -m 'Convert .drawio to PNG'
+          git push
