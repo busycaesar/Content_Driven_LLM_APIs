@@ -1,24 +1,27 @@
 from db.vector_db import get_vector_store, split_content
+import uuid
 
 class UserContent:
     def __init__(self, user_id):
         self.user_id = user_id
 
+    def __get_new_collection_name(self):
+        return f"{self.user_id}/{uuid.uuid4().hex}"
+
     def store_new_content(self, content):
         # Split the content.
         splitted_content = split_content(content, 1000, 250)
 
-        # Generate collection name
-        collection_name = 'collection_name2'
-
-        # Get the vector store instance.
-        vector_store = get_vector_store(collection_name)
+        # Get the vector store instance by passing the name collection name.
+        vector_store = get_vector_store(self.__get_new_collection_name())
 
         # Figure out how to get the collection id of the stored document.
         vector_store.add_documents(splitted_content)
 
         # Get collection id using the collection name.
         collection_id = 1
+
+        # Store the collection id in user_content table.
 
         return collection_id
 
