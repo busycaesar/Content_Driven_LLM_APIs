@@ -1,5 +1,5 @@
 from flask import Flask
-from env_variable import port
+from utils.env_variable import port
 from flask_cors import CORS
 
 # Import all the routes.

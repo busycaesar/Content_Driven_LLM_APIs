@@ -1,6 +1,7 @@
 services:
   db:
     image: pgvector/pgvector:pg16
+    container_name: pgvector
     restart: always
     env_file:
       - .env
