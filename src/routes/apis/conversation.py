@@ -13,8 +13,10 @@ async def post():
         prompt = data.get("prompt") 
         conversation_id = data.get("conversation_id")
 
-        if conversation_id: prompt_response = await add_prompt(conversation_id, prompt)
-        else: prompt_response = await start_new_conversation(user_id, content_id, prompt)
+        if conversation_id:
+            prompt_response = await add_prompt(conversation_id, prompt)
+        else:
+            prompt_response = await start_new_conversation(user_id, content_id, prompt)
 
         return jsonify(response(True, "Response sent", prompt_response)), 201
     except Exception as e:
