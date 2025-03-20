@@ -1,16 +1,21 @@
 from flask import Flask
-from utils.env_variable import port
 from flask_cors import CORS
+from model.db import db
+from utils.env_variable import port, postgres_connection_string
 
 # Import all the routes.
 from routes import routes
 
 # Initiate a Flask application.
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": [\
+CORS(app, resources={r"/*": {"origins": [
     "http://localhost:3000",
     "https://www.shahtech.info"
     ]}})
+
+app.config["SQLALCHEMY_DATABASE_URI"] = postgres_connection_string
+
+db.init_app(app)
 
 # Register the blueprint of all the routes.
 # API calls for the assigned url prefix will be redirected to the routes.
