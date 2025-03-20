@@ -1,7 +1,7 @@
 from utils import ErrorMessages
 
 class ConversationController:
-    def __init__(self, user_id=None, collection_id=None, conversation_id=None):
+    def __init__(self, user_id, collection_id, conversation_id=None):
         if not user_id or not collection_id:
             raise ValueError(ErrorMessages.MISSING_DATA(
                     ["user_id", "collection_id"],
