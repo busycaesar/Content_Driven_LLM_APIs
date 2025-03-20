@@ -11,7 +11,9 @@ class ConversationController:
         if not self.conversation_id:
             self.conversation_id = await self._start()
 
-        await self._add_prompt(prompt)
+        prompt_response = await self._add_prompt(prompt)
+
+        return prompt_response
 
     async def _start(self):
         if not self.user_id or not self.collection_id:
