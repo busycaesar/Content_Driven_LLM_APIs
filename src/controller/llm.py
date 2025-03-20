@@ -1,2 +1,4 @@
-async def get_available_llms():
-    return True
+class LLMController:
+    @staticmethod
+    async def get_all_llms():
+        return True
