@@ -1,7 +1,7 @@
 # PromptlicityAI
 
 <p align="center">
-  <img src="./assets/PromptlicityAI.png" />
+  <img src="./assets/PromptlicityAI.gif" />
 </p>
 
 ## Description
