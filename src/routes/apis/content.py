@@ -12,7 +12,9 @@ async def post():
         data = request.get_json()
         content = data.get("content")
 
-        collection_id = await store_new_content(user_id, content)
+        content_controller = ContentController(user_id)
+
+        collection_id = await content_controller.add(content)
 
         return jsonify(response(True, "New content is stored.", collection_id)), 201
     except Exception as e:
@@ -23,44 +25,54 @@ async def get():
     try:
         # Get user id from jwt token.
         user_id = 1
-        content = await get_all_content(user_id)
+
+        content_controller = ContentController(user_id)
+
+        content = await content_controller.get_all()
 
         return jsonify(response(True, "All the content sent.", content)), 200
     except Exception as e:
         return jsonify(response(False, f"Error: {str(e)}")), 500
 
-@content_apis.route("/<content_id>", methods=["GET"])
-async def get_content_id(content_id):
+@content_apis.route("/<collection_id>", methods=["GET"])
+async def get_collection_id(collection_id):
     try:
         # Get user id from jwt token.
         user_id = 1
-        content = await get_stored_content(user_id, content_id)
+
+        content_controller = ContentController(user_id, collection_id)
+
+        content = await content_controller.get()
 
         return jsonify(response(True, "Content sent.", content)), 200
     except Exception as e:
         return jsonify(response(False, f"Error: {str(e)}")), 500
     
-@content_apis.route("/<content_id>", methods=["PUT"])
-async def put_content_id(content_id):
+@content_apis.route("/<collection_id>", methods=["PUT"])
+async def put_collection_id(collection_id):
     try:
         # Get user id from jwt token.
         user_id = 1
         data = request.get_json()
         content = data.get("content")
         
-        await update_stored_content(user_id, content_id, content)
+        content_controller = ContentController(user_id, collection_id)
+
+        await content_controller.update(content)
 
         return jsonify(response(True, "Content Updated.")), 201
     except Exception as e:
         return jsonify(response(False, f"Error: {str(e)}")), 500
     
-@content_apis.route("/<content_id>", methods=["DELETE"])
-async def delete_content_id(content_id):
+@content_apis.route("/<collection_id>", methods=["DELETE"])
+async def delete_collection_id(collection_id):
     try:
         # Get user id from jwt token.
         user_id = 1
 
-        await delete_stored_content(user_id, content_id)
+        content_controller = ContentController(user_id, collection_id)
+
+        await content_controller.delete()
 
         return jsonify(response(True, "Delete stored content.")), 201
     except Exception as e:

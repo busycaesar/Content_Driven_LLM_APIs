@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from routes.response import response
-from controllers.user import register_user, validate_user, update_password, get_user, delete_user
+from controllers import UserController
 
 user_apis = Blueprint("user_apis", __name__)
 
@@ -13,7 +13,7 @@ async def post_register():
         email = data.get("email")
         password = data.get("password")
 
-        jwt = await register_user(name, email, password)
+        jwt = await UserController.register_user(name, email, password)
 
         return jsonify(response(True, "New user registered.", jwt)), 201
     except Exception as e:
@@ -27,7 +27,7 @@ async def post_validate():
         email = data.get("email")
         password = data.get("password")
 
-        jwt = await validate_user(email, password)
+        jwt = await UserController.validate_user(email, password)
 
         return jsonify(response(True, "User successfully varified", jwt)), 200
     except Exception as e:
@@ -43,7 +43,9 @@ async def patch_password():
         old_password = data.get("old_password")
         new_password = data.get("new_password")
 
-        await update_password(user_id, old_password, new_password)
+        user_controller = UserController(user_id)
+
+        await user_controller.update_password(old_password, new_password)
 
         return jsonify(response(True, "The user's password is updated.")), 201
     except Exception as e:
@@ -55,7 +57,9 @@ async def get():
         # Get user id from jwt token.
         user_id = 1
 
-        user_info = await get_user(user_id)
+        user_controller = UserController(user_id)
+
+        user_info = await user_controller.get_user()
 
         return jsonify(response(True, "User information sent.", user_info)), 200
     except Exception as e:
@@ -67,7 +71,9 @@ async def delete():
         # Get user id from jwt token.
         user_id = 1
 
-        await delete_user(user_id)
+        user_controller = UserController(user_id)
+
+        await user_controller.delete_user()
 
         return jsonify(response(True, "New content stored.")), 201
     except Exception as e:
