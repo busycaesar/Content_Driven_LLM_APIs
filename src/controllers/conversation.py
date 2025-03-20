@@ -1,3 +1,5 @@
+from utils import ErrorMessages
+
 class ConversationController:
     def __init__(self, user_id=None, collection_id=None, conversation_id=None):
         self.user_id = user_id
@@ -6,7 +8,12 @@ class ConversationController:
 
     async def add(self, prompt):
         if not prompt:
-            raise ValueError("Prompt must be provided. Please check the requirements of this API.")
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["prompt"],
+                    "Controller layer error."
+                )
+            )
 
         if not self.conversation_id:
             self.conversation_id = await self._start()
@@ -17,18 +24,33 @@ class ConversationController:
 
     async def _start(self):
         if not self.user_id or not self.collection_id:
-            raise ValueError("Both user id and collection id must be provided. Please check the requirements of this API.")
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["user_id", "collection_id"],
+                    "Controller layer error."
+                )
+            )
 
         return True
 
     async def _add_prompt(self, prompt):
         if not self.conversation_id or not prompt:
-            raise ValueError("Both conversation id and prompt must be provided. Please check the requirements of this API.")
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["conversation_id", "prompt"],
+                    "Controller layer error."
+                )
+            )
 
         return True
 
     async def get(self):
         if not self.conversation_id:
-            raise ValueError("Conversation id must be provided. Please check the requirements of this API.")
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["conversation_id"],
+                    "Controller layer error."
+                )
+            )
 
         return True

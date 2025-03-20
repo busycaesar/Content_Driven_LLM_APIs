@@ -1,4 +1,5 @@
-from service.content import add_content
+from services import ContentService
+from utils import ErrorMessages
 
 class ContentController:
     def __init__(self, user_id=None, collection_id=None):
@@ -7,32 +8,59 @@ class ContentController:
 
     async def add(self, content):
         if not self.user_id or not content:
-            raise ValueError("Both user id and content must be provided. Please check the requirements of this API.")
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["user_id", "content"],
+                    "Controller layer error."
+                )
+            )
+        
+        content_service = ContentService(self.user_id)
     
-        self.collection_id = await add_content(self.user_id, content)
+        self.collection_id = await content_service.add(content)
 
         return self.collection_id
 
     async def get_all(self):
         if not self.user_id:
-            raise ValueError("collection id must be provided. Please check the requirements of this API.")
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["user_id"],
+                    "Controller layer error."
+                )
+            )
 
         return True
 
     async def get(self):
         if not self.user_id or not self.collection_id:
-            raise ValueError("Both user id and collection id must be provided. Please check the requirements of this API.")
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["user_id", "collection_id"],
+                    "Controller layer error."
+                )
+            )
         
         return True
 
     async def update(self, content):
         if not self.user_id or not self.collection_id or not content:
-            raise ValueError("User id, collection id and content must be provided. Please check the requirements of this API.")
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["user_id", "collection_id", "content"],
+                    "Controller layer error."
+                )
+            )
         
         return True
 
     async def delete(self):
         if not self.user_id or not self.collection_id:
-            raise ValueError("Both user id and collection id must be provided. Please check the requirements of this API.")
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["user_id", "collection_id"],
+                    "Controller layer error."
+                )
+            )
 
         return True
