@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from routes.response import response
-from controller.prompt_template import update_prompt_template, get_prompt_template
+from controllers.prompt_template import update_prompt_template, get_prompt_template
 
 prompt_template_apis = Blueprint("prompt_template_apis", __name__)
 

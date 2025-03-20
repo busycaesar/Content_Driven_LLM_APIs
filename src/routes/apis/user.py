@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from routes.response import response
-from controller.user import register_user, validate_user, update_password, get_user, delete_user
+from controllers.user import register_user, validate_user, update_password, get_user, delete_user
 
 user_apis = Blueprint("user_apis", __name__)
 

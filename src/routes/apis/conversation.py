@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from routes.response import response
-from controller.conversation import start_new_conversation, add_prompt, get_conversation
+from controllers.conversation import start_new_conversation, add_prompt, get_conversation
 
 conversation_apis = Blueprint("conversation_apis", __name__)
 

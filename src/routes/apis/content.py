@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from routes.response import response
-from controller.content import store_new_content, get_all_content, get_stored_content, update_stored_content, delete_stored_content
+from controllers import ContentController
 
 content_apis = Blueprint("content_apis", __name__)
 

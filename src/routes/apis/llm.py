@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from routes.response import response
-from controller.llm import get_available_llms
+from controllers.llm import get_available_llms
 
 llm_apis = Blueprint("llm_apis", __name__)
 

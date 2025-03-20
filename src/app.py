@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from model.db import db
+from models.db import db
 from utils import EnvVars
 
 # Import all the routes.
