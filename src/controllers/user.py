@@ -1,7 +1,13 @@
 from utils import ErrorMessages
 
 class UserController:
-    def __init__(self, user_id=None):
+    def __init__(self, user_id):
+        if not user_id:
+            raise ValueError(ErrorMessages.MISSING_DATA(
+                    ["user_id"],
+                    "Controller layer error."
+            ))
+
         self.user_id = user_id
 
     @staticmethod
@@ -29,10 +35,10 @@ class UserController:
         return True
 
     async def update_password(self, old_password, new_password):
-        if not self.user_id or not old_password or not new_password:
+        if not old_password or not new_password:
             raise ValueError(
                 ErrorMessages.MISSING_DATA(
-                    ["user_id", "old_password", "new_password"],
+                    ["old_password", "new_password"],
                     "Controller layer error."
                 )
             )
@@ -40,23 +46,9 @@ class UserController:
         return True
 
     async def get_user(self):
-        if not self.user_id:
-            raise ValueError(
-                ErrorMessages.MISSING_DATA(
-                    ["user_id"],
-                    "Controller layer error."
-                )
-            )
                 
         return True
 
     async def delete_user(self):
-        if not self.user_id:
-            raise ValueError(
-                ErrorMessages.MISSING_DATA(
-                    ["user_id"],
-                    "Controller layer error."
-                )
-            )
                 
         return True
