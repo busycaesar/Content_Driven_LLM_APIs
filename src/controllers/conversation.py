@@ -4,22 +4,22 @@ class ConversationController:
         self.collection_id = collection_id
         self.conversation_id = conversation_id
 
-    async def add(self, prompt, conversation_id=None):
+    async def add(self, prompt):
         if not prompt:
             raise ValueError("Prompt must be provided. Please check the requirements of this API.")
 
-        if not conversation_id:
-            self.conversation_id = await self.__start()
+        if not self.conversation_id:
+            self.conversation_id = await self._start()
 
-        await self.__add_prompt(prompt)
+        await self._add_prompt(prompt)
 
-    async def __start(self):
+    async def _start(self):
         if not self.user_id or not self.collection_id:
             raise ValueError("Both user id and collection id must be provided. Please check the requirements of this API.")
 
         return True
 
-    async def __add_prompt(self, prompt):
+    async def _add_prompt(self, prompt):
         if not self.conversation_id or not prompt:
             raise ValueError("Both conversation id and prompt must be provided. Please check the requirements of this API.")
 
