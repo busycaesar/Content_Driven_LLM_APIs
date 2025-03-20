@@ -11,6 +11,15 @@ class ConversationController:
         self.user_id = user_id
         self.collection_id = collection_id
         self.conversation_id = conversation_id
+        
+    def _validate_conversation_id(self):
+        if not self.conversation_id:
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["conversation_id"],
+                    "Controller layer error."
+                )
+            )        
 
     async def add(self, prompt):
         if not prompt:
@@ -30,10 +39,12 @@ class ConversationController:
         return True
 
     async def _add_prompt(self, prompt):
-        if not self.conversation_id or not prompt:
+        self._validate_conversation_id()
+
+        if not prompt:
             raise ValueError(
                 ErrorMessages.MISSING_DATA(
-                    ["conversation_id", "prompt"],
+                    ["prompt"],
                     "Controller layer error."
                 )
             )
@@ -41,12 +52,6 @@ class ConversationController:
         return True
 
     async def get(self):
-        if not self.conversation_id:
-            raise ValueError(
-                ErrorMessages.MISSING_DATA(
-                    ["conversation_id"],
-                    "Controller layer error."
-                )
-            )
+        self._validate_conversation_id()
 
         return True

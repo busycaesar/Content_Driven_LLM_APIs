@@ -12,6 +12,15 @@ class ContentController:
         self.user_id = user_id
         self.collection_id = collection_id
 
+    def _validate_collection_id(self):
+        if not self.collection_id:
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["collection_id"],
+                    "Controller layer error."
+                )
+            )
+
     async def add(self, content):
         if not content:
             raise ValueError(ErrorMessages.MISSING_DATA(
@@ -29,28 +38,22 @@ class ContentController:
         return True
 
     async def get(self):
-        if not self.collection_id:
-            raise ValueError(ErrorMessages.MISSING_DATA(
-                    ["collection_id"],
-                    "Controller layer error."
-            ))
+        self._validate_collection_id()
         
         return True
 
     async def update(self, content):
-        if not self.collection_id or not content:
+        self._validate_collection_id()
+
+        if not content:
             raise ValueError(ErrorMessages.MISSING_DATA(
-                    ["collection_id", "content"],
+                    ["content"],
                     "Controller layer error."
             ))
         
         return True
 
     async def delete(self):
-        if not self.collection_id:
-            raise ValueError(ErrorMessages.MISSING_DATA(
-                    ["collection_id"],
-                    "Controller layer error."
-            ))
+        self._validate_collection_id()
 
         return True
