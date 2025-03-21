@@ -6,7 +6,7 @@ on:
       - Docs
 
 jobs:
-  draw.io:
+  drawio:
     name: Draw.io to PNG
     runs-on: ubuntu-latest
     
