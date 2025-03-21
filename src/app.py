@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
-from model.db import db
-from utils.env_variable import port, postgres_connection_string
+from models.db import db
+from utils import EnvVars
 
 # Import all the routes.
 from routes import routes
@@ -13,7 +13,7 @@ CORS(app, resources={r"/*": {"origins": [
     "https://www.shahtech.info"
     ]}})
 
-app.config["SQLALCHEMY_DATABASE_URI"] = postgres_connection_string
+app.config["SQLALCHEMY_DATABASE_URI"] = EnvVars.POSTGRESQL_CONNECTION_STRING
 
 db.init_app(app)
 
@@ -23,6 +23,6 @@ app.register_blueprint(routes, url_prefix="/")
 
 if __name__ == "__main__":
 
-    if port:
+    if EnvVars.PORT:
         # Run the application.
-        app.run(host="0.0.0.0",debug=True, port=port)
+        app.run(host="0.0.0.0", debug=True, port=EnvVars.PORT)
