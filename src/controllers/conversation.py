@@ -1,4 +1,5 @@
 from utils import ErrorMessages
+from services import ConversationService
 
 class ConversationController:
     def __init__(self, user_id, collection_id, conversation_id=None):
@@ -11,6 +12,11 @@ class ConversationController:
         self.user_id = user_id
         self.collection_id = collection_id
         self.conversation_id = conversation_id
+
+        self.conversation_service = ConversationService(
+            self.user_id,
+            self.collection_id,self.conversation_id
+        )
         
     def _validate_conversation_id(self):
         if not self.conversation_id:
@@ -36,7 +42,9 @@ class ConversationController:
         return prompt_response
 
     async def _start(self):
-        return True
+        self.conversation_id = await self.conversation_service.start()
+        
+        return self.conversation_id
 
     async def _add_prompt(self, prompt):
         self._validate_conversation_id()
@@ -48,10 +56,14 @@ class ConversationController:
                     "Controller layer error."
                 )
             )
+        
+        response = await self.conversation_service.add_prompt(prompt)
 
-        return True
+        return response
 
     async def get(self):
         self._validate_conversation_id()
 
-        return True
+        conversation = await self.conversation_service.get()
+
+        return conversation

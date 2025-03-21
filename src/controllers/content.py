@@ -12,6 +12,8 @@ class ContentController:
         self.user_id = user_id
         self.collection_id = collection_id
 
+        self.content_service = ContentService(self.user_id, self.collection_id)
+
     def _validate_collection_id(self):
         if not self.collection_id:
             raise ValueError(
@@ -28,19 +30,21 @@ class ContentController:
                     "Controller layer error."
             ))
         
-        content_service = ContentService(self.user_id)
-    
-        self.collection_id = await content_service.add(content)
+        self.collection_id = await self.content_service.add(content)
 
         return self.collection_id
 
     async def get_all(self):
-        return True
+        content = await self.content_service.get_all()
+
+        return content
 
     async def get(self):
         self._validate_collection_id()
         
-        return True
+        content = await self.content_service.get()
+
+        return content
 
     async def update(self, content):
         self._validate_collection_id()
@@ -51,9 +55,9 @@ class ContentController:
                     "Controller layer error."
             ))
         
-        return True
+        await self.content_service.update(content)
 
     async def delete(self):
         self._validate_collection_id()
 
-        return True
+        await self.content_service.delete()
