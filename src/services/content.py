@@ -24,8 +24,15 @@ class ContentService:
                 )
             )
 
-    def validate_content_ownership(self):
-        self._validate_collection_id()
+    @staticmethod
+    async def validate_content_ownership(user_id, collection_id):
+        if not user_id or not collection_id:
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["user_id", "collection_id"],
+                    "Service layer error."
+                )
+            )
 
         # Validate if the content belongs with the user whos id is provided.
 
@@ -43,7 +50,7 @@ class ContentService:
                 )
             )
         
-        self.validate_content_ownership()
+        await ContentService.validate_content_ownership(self.user_id, self.collection_id)
 
         # Initiate Vector Store.
         vector_store = VectorStoreModel()
@@ -76,8 +83,9 @@ class ContentService:
         self._validate_collection_id()
 
         # Get the content using the collection id.
-        
-        return True
+        content = ""
+
+        return content
 
     async def update(self, content):
         self._validate_collection_id()
@@ -91,12 +99,8 @@ class ContentService:
             )
         
         # Update the content using the collection id.
-        
-        return True
 
     async def delete(self):
         self._validate_collection_id()
 
         # Delete the content using the collection id.
-
-        return True
