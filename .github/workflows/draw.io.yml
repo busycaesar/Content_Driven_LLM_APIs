@@ -1,3 +1,16 @@
+name: Draw.io
+
+on:
+  push:
+    branches:
+      - Docs
+
+jobs:
+  dockerhub:
+    name: Draw.io to PNG
+
+    runs-on: ubuntu-latest
+    
   steps:
   - uses: actions/checkout@v2
   - name: Convert digramm to png
