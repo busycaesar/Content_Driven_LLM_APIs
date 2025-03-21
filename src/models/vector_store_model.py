@@ -1,4 +1,4 @@
-from adaptor import EmbeddingModelAdaptor, VectorDBAdaptor, TextSplitterAdaptor
+from adaptors import EmbeddingModelAdaptor, VectorDBAdaptor, TextSplitterAdaptor
 
 class VectorStoreModel:
     def __init__(self, collection_id=None):
