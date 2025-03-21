@@ -25,11 +25,16 @@ PromptlicityAI is a platform that enables users to store and manage custom conte
 
 ## System Diagram
 
-[Work in progress]
+![System Diagram](docs/System%20Architecture.svg)
+
+## DB Schema
+
+![DB Schema](docs/DBSchema.svg)
+
 
 ## Documentation
 
-[Work in progress]
+- [API Documentation](docs/api.md)
 
 ## Author
 
