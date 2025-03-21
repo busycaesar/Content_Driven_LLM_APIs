@@ -6,15 +6,14 @@ on:
       - Docs
 
 jobs:
-  dockerhub:
+  draw.io:
     name: Draw.io to PNG
-
     runs-on: ubuntu-latest
     
-  steps:
-  - uses: actions/checkout@v2
-  - name: Convert digramm to png
-    uses: Burnett01/actions-drawio@1.2
-    with:
-      src: './docs/System Architecture.drawio'
-      dest: './docs/System Architecture.png'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Convert diagram to png
+        uses: Burnett01/actions-drawio@1.2
+        with:
+          src: './docs/System Architecture.drawio'
+          dest: './docs/System Architecture.png'
