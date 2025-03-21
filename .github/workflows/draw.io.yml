@@ -6,20 +6,29 @@ on:
       - Docs
 
 jobs:
-  drawio:
-    name: Draw.io to PNG
+  render_drawio:
     runs-on: ubuntu-latest
+    name: Render .drawio files
     
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Ensures all files are fetched
-
-      - name: Debug - List files in docs folder
-        run: ls -R ./docs
-
-      - name: Convert Draw.io diagram to PNG
-        uses: Burnett01/actions-drawio@1.2
-        with:
-          src: "./docs/System Architecture.drawio"
-          dest: "./docs/System Architecture.png"
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: Render .drawio files
+      uses: docker://ghcr.io/racklet/render-drawio-action:v1
+      with:
+        formats: 'png'
+        sub-dirs: 'docs'
+        skip-dirs: '.git'
+      id: render
+      
+    - name: List the rendered files
+      run: 'ls -l ${{ steps.render.outputs.rendered-files }}'
+    
+    - name: Commit the rendered files
+      uses: EndBug/add-and-commit@v7
+      with:
+        default_author: github_actor
+        message: 'Automatically render .drawio files'
+        add: "${{ steps.render.outputs.rendered-files }}"
+      if: "${{ steps.render.outputs.rendered-files != ''}}"
