@@ -1,19 +1,12 @@
-# Content Driven LLM APIs (In Dev.)
+# PromptlicityAI
+
+<p align="center">
+  <img src="./assets/PromptlicityAI.gif" />
+</p>
 
 ## Description
 
-This project is offered as **Image as a Service**. The image can be pulled from DockerHub (`busycaesar/content_driven_llm_apis`) and started. It provides RESTful APIs to integrate AI functionalities into existing projects. This project offers the ability to store and manage content. Additionally, it provides APIs to generate knowledge-based responses using LLMs.
-
-The content is divided into several chunks and stored in a vector database. When a user submits a query, the relevant chunks of data are retrieved from the vector database, combined with the query in a prompt template, and then sent to the LLM to generate a response.
-
-Previously, the application was developed using JavaScript and stored data in PostgreSQL. However, the project is currently being migrated to Python with the LangChain framework, and the data is being stored in pgvector.
-
-To use the image, please refer to [Project Documentation](./documentation.md) to check all the requirements to setup the image.
-
-## Video Explanation
-
-[<img src="https://img.youtube.com/vi/R7Xiv3iG7Fg/0.jpg" width="500" height="375"
-/>](https://www.youtube.com/embed/R7Xiv3iG7Fg)
+PromptlicityAI is a platform that enables users to store and manage custom content, which can then be used to generate knowledge-based responses through API calls. With PromptlicityAI, you can easily store content in a structured way and retrieve relevant knowledge chunks based on prompts—without needing to understand the underlying architecture of Retrieval-Augmented Generation (RAG) applications or how frameworks like work. PromptlicityAI simplifies the process of managing and querying knowledge content, enabling seamless AI integration without the complexity of underlying systems.
 
 ## Tech Stack
 
@@ -24,17 +17,24 @@ To use the image, please refer to [Project Documentation](./documentation.md) to
 
 ## Features
 
-- Store content
-- Prompt LLM and get knowledge based response
+- **Content Storage**: Store and manage custom content with ease.
+- **API Access**: Generate API keys to retrieve knowledge-based responses using the stored content.
+- **User-Friendly Interface**: A simple dashboard where users can manage their content and API keys, making it easy to integrate and retrieve responses from stored knowledge.
+- **No Technical Overhead**: Users don’t need to know the complex processes of how knowledge is stored, chunks are retrieved, or how to work with large language models (LLMs) for generating responses.
+- **Knowledge-Based Responses**: Get relevant responses from your content based on the prompts you provide.
 
 ## System Diagram
 
-<img src="./system_diagram.png" width="750" height="400" />
+![System Diagram](docs/System%20Architecture.svg)
+
+## DB Schema
+
+![DB Schema](docs/DBSchema.svg)
+
 
 ## Documentation
 
-- [API Documentation](./api-documentation.md)
-- [Project Documentation](./documentation.md)
+- [API Documentation](docs/api.md)
 
 ## Author
 

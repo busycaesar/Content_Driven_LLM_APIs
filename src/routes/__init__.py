@@ -1,7 +1,5 @@
 from flask import Blueprint, jsonify
 from .response import response
-
-# Import the apis blueprint.
 from .apis import apis
 
 # Initiate Blueprint with the name routes.
@@ -15,3 +13,7 @@ def health_check():
 # Register a Blueprint to the routes.
 # All the API calls with the url prefix /api will be redirected to the apis.
 routes.register_blueprint(apis, url_prefix="/api")
+
+@routes.app_errorhandler(404)
+def not_found(error):
+    return jsonify(response(False, "Route not found.")), 404

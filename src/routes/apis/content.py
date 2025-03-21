@@ -1,26 +1,79 @@
 from flask import Blueprint, request, jsonify
 from routes.response import response
-from db import add_new_content#, get_content, put_content, delete_content
+from controllers import ContentController
 
 content_apis = Blueprint("content_apis", __name__)
 
 @content_apis.route("/", methods=["POST"])
-async def api_post_content():
-    # All data from the request body.
-    data = request.get_json()
-
-    # Get the value of content from the data.
-    content = data.get("content")
-    gemini_api_keys = data.get("gemini_api_keys")
-
-    # Make sure the content is not empty.
-    if not content:
-        return jsonify(response(False,"Content not provided")), 400
-
-    # Store the content in a Vector DB.
+async def post():
     try:
-        await add_new_content(content=content, gemini_api_keys=gemini_api_keys)
+        # Get user id from jwt token.
+        user_id = 1
+        data = request.get_json()
+        content = data.get("content")
+
+        content_controller = ContentController(user_id)
+
+        collection_id = await content_controller.add(content)
+
+        return jsonify(response(True, "New content is stored.", collection_id)), 201
+    except Exception as e:
+        return jsonify(response(False, f"Error: {str(e)}")), 500
+
+@content_apis.route("/", methods=["GET"])
+async def get():
+    try:
+        # Get user id from jwt token.
+        user_id = 1
+
+        content_controller = ContentController(user_id)
+
+        content = await content_controller.get_all()
+
+        return jsonify(response(True, "All the content sent.", content)), 200
+    except Exception as e:
+        return jsonify(response(False, f"Error: {str(e)}")), 500
+
+@content_apis.route("/<collection_id>", methods=["GET"])
+async def get_collection_id(collection_id):
+    try:
+        # Get user id from jwt token.
+        user_id = 1
+
+        content_controller = ContentController(user_id, collection_id)
+
+        content = await content_controller.get()
+
+        return jsonify(response(True, "Content sent.", content)), 200
+    except Exception as e:
+        return jsonify(response(False, f"Error: {str(e)}")), 500
+    
+@content_apis.route("/<collection_id>", methods=["PUT"])
+async def put_collection_id(collection_id):
+    try:
+        # Get user id from jwt token.
+        user_id = 1
+        data = request.get_json()
+        content = data.get("content")
         
-        return jsonify(response(True, "New content stored.")), 201
+        content_controller = ContentController(user_id, collection_id)
+
+        await content_controller.update(content)
+
+        return jsonify(response(True, "Content Updated.")), 201
+    except Exception as e:
+        return jsonify(response(False, f"Error: {str(e)}")), 500
+    
+@content_apis.route("/<collection_id>", methods=["DELETE"])
+async def delete_collection_id(collection_id):
+    try:
+        # Get user id from jwt token.
+        user_id = 1
+
+        content_controller = ContentController(user_id, collection_id)
+
+        await content_controller.delete()
+
+        return jsonify(response(True, "Delete stored content.")), 201
     except Exception as e:
         return jsonify(response(False, f"Error: {str(e)}")), 500
