@@ -1,5 +1,9 @@
 # PromptlicityAI
 
+<p align="center">
+  <img src="./assets/PromptlicityAI.gif" />
+</p>
+
 ## Description
 
 PromptlicityAI is a platform that enables users to store and manage custom content, which can then be used to generate knowledge-based responses through API calls. With PromptlicityAI, you can easily store content in a structured way and retrieve relevant knowledge chunks based on prompts—without needing to understand the underlying architecture of Retrieval-Augmented Generation (RAG) applications or how frameworks like work. PromptlicityAI simplifies the process of managing and querying knowledge content, enabling seamless AI integration without the complexity of underlying systems.
@@ -21,11 +25,16 @@ PromptlicityAI is a platform that enables users to store and manage custom conte
 
 ## System Diagram
 
-[Work in progress]
+![System Diagram](docs/System%20Architecture.svg)
+
+## DB Schema
+
+![DB Schema](docs/DBSchema.svg)
+
 
 ## Documentation
 
-[Work in progress]
+- [API Documentation](docs/api.md)
 
 ## Author
 

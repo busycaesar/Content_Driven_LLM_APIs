@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from routes.response import response
-from controller.conversation import start_new_conversation, add_prompt, get_conversation
+from controllers import ConversationController
 
 conversation_apis = Blueprint("conversation_apis", __name__)
 
@@ -9,14 +9,17 @@ async def post():
     try:
         data = request.get_json()
         user_id = data.get("user_id")
-        content_id = data.get("content_id")
-        prompt = data.get("prompt") 
+        collection_id = data.get("collection_id")
+        prompt = data.get("prompt")
         conversation_id = data.get("conversation_id")
 
-        if conversation_id:
-            prompt_response = await add_prompt(conversation_id, prompt)
-        else:
-            prompt_response = await start_new_conversation(user_id, content_id, prompt)
+        conversation_controller = ConversationController(
+            user_id,
+            collection_id,
+            conversation_id
+        )
+
+        prompt_response = await conversation_controller.add(prompt)
 
         return jsonify(response(True, "Response sent", prompt_response)), 201
     except Exception as e:
@@ -25,7 +28,9 @@ async def post():
 @conversation_apis.route("/<conversation_id>", methods=["GET"])
 async def get_conversation_id(conversation_id):
     try:
-        conversation = await get_conversation(conversation_id)
+        conversation_controller = ConversationController(conversation_id)
+
+        conversation = await conversation_controller.get()
 
         return jsonify(response(True, "Conversation sent.", conversation)), 201
     except Exception as e:
