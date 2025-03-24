@@ -1,17 +1,25 @@
 from adaptors import EmbeddingModelAdaptor, VectorDBAdaptor, TextSplitterAdaptor
+from utils import ErrorMessages
 
 class VectorStoreModel:
-    def __init__(self, collection_id=None):
+    def __init__(self, collection_id):
+        if not collection_id:
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["collection_id"],
+                    "Model layer error."
+                )
+            )
+
         self.collection_id = collection_id
-
-    def __get_vector_store(self, collection_name):
-        embedding_model = EmbeddingModelAdaptor()
-
-        return VectorDBAdaptor(collection_name, embedding_model)
+        self.embedding_model = EmbeddingModelAdaptor()
+        self.vector_store = VectorDBAdaptor(
+            self.collection_id,
+            self.embedding_model
+        )
     
     def store_new_content(
             self,
-            collection_name,
             content,
             chunk_size=None,
             chunk_overlap=None,
@@ -25,11 +33,5 @@ class VectorStoreModel:
             separator
         )
 
-        # Get the vector store instance by passing the name collection name.
-        vector_store = self.__get_vector_store(collection_name)
-
         # Store the splitter content in the vector store.
-        self.collection_id = vector_store.store_document(splitted_content)
-
-        # Return the collection id.
-        return self.collection_id
+        self.vector_store.store_document(splitted_content)

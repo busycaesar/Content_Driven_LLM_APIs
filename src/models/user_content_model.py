@@ -1,36 +1,35 @@
 from models.db import db
 from sqlalchemy import func
-from datetime import datetime
+from utils import ErrorMessages
 
-class UserContent:
+class UserContent(db.Model):
     __tablename__ = "user_content"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, nullable=False)
     collection_id = db.Column(db.Integer, nullable=False)
-    created_on = db.Column(db.DateTime, nullable=False, default=func.now())
-    modified_on = db.Column(db.DateTime, onupdate=func.now())
+    created_on = db.Column(db.DateTime, nullable=False, default=func.now)
+    modified_on = db.Column(db.DateTime, onupdate=func.now)
 
-    def __init__(self, user_id):
+    def __init__(self, user_id, collection_id):
+        if not user_id or not collection_id:
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["user_id", "collection_id"],
+                    "Model layer error."
+                )
+            )
+
         self.user_id = user_id
+        self.collection_id = collection_id
 
-    def store_new_content(self, content):
-        return collection_id
+    @staticmethod
+    def get_all_collection_id(user_id):
+        # Get all the collection ids of the user using the user id.
+        collection_ids = []
 
-    def get_all_content(self):
-        # Get all the collection id of the user.
-        # Get the content using the collection ids of the user.
-        # Return all the content.
-        return ["All Content", "Of the user"]
-
-    def update_content(self, collection_id, content):
-        # Get the vector store instance.
-
-        # Update the content.
-        return
+        # Return all the collection ids of the user.
+        return collection_ids
     
-    def delete_content(self, collection_id):
-        # Get the vector store instance.
-
-        # Delete the content.
-        return
+    def delete_content(self):
+        # Delete the row.
