@@ -1,10 +1,12 @@
 from flask import Flask
 from flask_cors import CORS
-from models.db import db
-from utils import EnvVars
-
-# Import all the routes.
+from models import db
+from utils import EnvVars, ErrorMessages
 from routes import routes
+
+if not EnvVars.POSTGRESQL_CONNECTION_STRING:
+    raise ValueError(
+        ErrorMessages.MISSING_DATA(["POSTGRESQL_CONNECTION_STRING"],))
 
 # Initiate a Flask application.
 app = Flask(__name__)
@@ -16,6 +18,9 @@ CORS(app, resources={r"/*": {"origins": [
 app.config["SQLALCHEMY_DATABASE_URI"] = EnvVars.POSTGRESQL_CONNECTION_STRING
 
 db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 # Register the blueprint of all the routes.
 # API calls for the assigned url prefix will be redirected to the routes.
