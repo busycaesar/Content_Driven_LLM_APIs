@@ -6,7 +6,7 @@ from utils import ErrorMessages
 class User(db.Model):
     __tablename__ = "user"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(String(32),primary_key=True, nullable=False)
     name = Column(String(20), nullable=False)
     email = Column(String(20), nullable=False)
     created_on = Column(DateTime, nullable=False, default=func.now())

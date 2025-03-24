@@ -2,8 +2,6 @@ from flask import Flask
 from flask_cors import CORS
 from routes import routes
 from models import db
-from utils import EnvVars, ErrorMessages
-from adaptors import DBAdaptor
 
 # Initiate a Flask application.
 app = Flask(__name__)
