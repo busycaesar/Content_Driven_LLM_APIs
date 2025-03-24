@@ -19,7 +19,7 @@ jobs:
     - name: Render .drawio files
       uses: docker://ghcr.io/racklet/render-drawio-action:v1
       with:
-        formats: 'png'
+        formats: 'png,jpg'
         sub-dirs: 'docs'
         skip-dirs: '.git'
       id: render
