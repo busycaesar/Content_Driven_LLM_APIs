@@ -1,3 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy
+from utils import EnvVars, ErrorMessages
+from adaptors import DBAdaptor
 
-db = SQLAlchemy()
+if not EnvVars.POSTGRESQL_CONNECTION_STRING:
+    raise ValueError(ErrorMessages.MISSING_DATA(["POSTGRESQL_CONNECTION_STRING"]))
+
+db = DBAdaptor(EnvVars.POSTGRESQL_CONNECTION_STRING)

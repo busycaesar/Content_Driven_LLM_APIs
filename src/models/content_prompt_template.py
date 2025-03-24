@@ -1,4 +1,4 @@
-from models.db import db
+from .db import db
 from sqlalchemy import Column, Integer, Text, DateTime
 from sqlalchemy.sql import func
 from utils import ErrorMessages

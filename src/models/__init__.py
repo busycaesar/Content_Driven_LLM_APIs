@@ -1,5 +1,4 @@
 from .vector_store_model import VectorStoreModel
-from .db import db
 from .user_content_model import UserContent
 from .content_llm import ContentLLM
 from .content_prompt_template import ContentPromptTemplate
@@ -8,3 +7,4 @@ from .llm import LLM
 from .prompt import Prompt
 from .user import User
 from .user_api_key import UserAPIKey
+from .db import db
