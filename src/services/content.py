@@ -38,8 +38,8 @@ class ContentService:
 
         return True
 
-    def _get_new_collection_name(self):
-        return f"{self.user_id}/{uuid.uuid4().hex}"
+    def _get_new_collection_uuid(self):
+        return uuid.uuid4().hex
 
     async def add(self, content):
         if not content:
@@ -50,17 +50,14 @@ class ContentService:
                 )
             )
         
-        await ContentService.validate_content_ownership(self.user_id, self.collection_id)
+        # Get a new collection name.
+        self.collection_id = self._get_new_collection_uuid()
 
         # Initiate Vector Store.
-        vector_store = VectorStoreModel()
+        vector_store = VectorStoreModel(self.collection_id)
 
-        # Get a new collection name.
-        collection_name = self._get_new_collection_name()
-
-        # Store the content and get the collection id.
-        self.collection_id = vector_store.store_new_content(
-            collection_name,
+        # Store the content.
+        vector_store.store_new_content(
             content,
             ConfigVars.CHUNK_SIZE,
             ConfigVars.CHUNK_OVERLAP
