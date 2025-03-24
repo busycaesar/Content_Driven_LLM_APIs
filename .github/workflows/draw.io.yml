@@ -3,7 +3,7 @@ name: Draw.io
 on:
   push:
     branches:
-      - Docs
+      - Master
 
 jobs:
   render_drawio:
