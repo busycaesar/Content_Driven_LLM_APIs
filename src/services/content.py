@@ -1,4 +1,4 @@
-from models import VectorStoreModel
+from models import VectorStoreModel, UserContent
 from utils import ConfigVars, ErrorMessages
 import uuid
 
@@ -64,6 +64,9 @@ class ContentService:
         )
 
         # Store the collection id and user id in the user content table.
+        user_content = UserContent(self.user_id, self.collection_id)
+
+        user_content.save()
     
         # Return the collection id.
         return self.collection_id

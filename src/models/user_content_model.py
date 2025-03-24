@@ -1,5 +1,5 @@
 from .db import db
-from sqlalchemy import Column, Integer, DateTime
+from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.sql import func
 from utils import ErrorMessages
 
@@ -7,8 +7,8 @@ class UserContent(db.Model):
     __tablename__ = "user_content"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, nullable=False)
-    collection_id = Column(Integer, nullable=False)
+    user_id = Column(String(32), nullable=False)
+    collection_id = Column(String(32), nullable=False)
     created_on = Column(DateTime, nullable=False, default=func.now())
     modified_on = Column(DateTime, onupdate=func.now())
 
@@ -32,6 +32,6 @@ class UserContent(db.Model):
         # Return all the collection ids of the user.
         return collection_ids
     
-    def delete_content(self):
-        # Delete the row.
-        pass
+    def save(self):
+        db.session.add(self)
+        db.session.commit()

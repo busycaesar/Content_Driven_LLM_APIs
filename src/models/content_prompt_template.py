@@ -1,5 +1,5 @@
 from .db import db
-from sqlalchemy import Column, Integer, Text, DateTime
+from sqlalchemy import Column, Integer, Text, DateTime, String
 from sqlalchemy.sql import func
 from utils import ErrorMessages
 
@@ -7,7 +7,7 @@ class ContentPromptTemplate(db.Model):
     __tablename__ = "content_prompt_template"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    collection_id = Column(Integer, nullable=False)
+    collection_id = Column(String(32), nullable=False)
     prompt_template = Column(Text, nullable=False)
     created_on = Column(DateTime, nullable=False, default=func.now())
     modified_on = Column(DateTime, onupdate=func.now())
