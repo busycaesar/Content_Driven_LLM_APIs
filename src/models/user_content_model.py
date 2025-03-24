@@ -1,15 +1,16 @@
 from models.db import db
-from sqlalchemy import func
+from sqlalchemy import Column, Integer, DateTime
+from sqlalchemy.sql import func
 from utils import ErrorMessages
 
 class UserContent(db.Model):
     __tablename__ = "user_content"
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, nullable=False)
-    collection_id = db.Column(db.Integer, nullable=False)
-    created_on = db.Column(db.DateTime, nullable=False, default=func.now)
-    modified_on = db.Column(db.DateTime, onupdate=func.now)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, nullable=False)
+    collection_id = Column(Integer, nullable=False)
+    created_on = Column(DateTime, nullable=False, default=func.now())
+    modified_on = Column(DateTime, onupdate=func.now())
 
     def __init__(self, user_id, collection_id):
         if not user_id or not collection_id:
@@ -33,3 +34,4 @@ class UserContent(db.Model):
     
     def delete_content(self):
         # Delete the row.
+        pass
