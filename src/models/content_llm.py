@@ -7,7 +7,7 @@ class ContentLLM(db.Model):
     __tablename__ = "content_llm"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    collection_id = Column(String(32), nullable=False)
+    collection_id = Column(String(32), nullable=False,unique=True)
     llm_id = Column(Integer, nullable=False)
     created_on = Column(DateTime, nullable=False, default=func.now())
     modified_on = Column(DateTime, onupdate=func.now())

@@ -7,7 +7,7 @@ class Conversation(db.Model):
     __tablename__ = "conversation"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    collection_id = Column(String(32), nullable=False)
+    collection_id = Column(String(32), nullable=False, unique=True)
     created_on = Column(DateTime, nullable=False, default=func.now())
     modified_on = Column(DateTime, onupdate=func.now())
 
