@@ -1,16 +1,19 @@
 from utils import ErrorMessages
 
 class ConversationService:
-    def __init__(self, user_id, collection_id, conversation_id=None):
-        if not user_id or not collection_id:
-            raise ValueError(ErrorMessages.MISSING_DATA(
-                    ["user_id", "collection_id"],
-                    "Service layer error."
-            ))
-
+    def __init__(self, user_id=None, collection_id=None, conversation_id=None):
         self.user_id = user_id
         self.collection_id = collection_id
         self.conversation_id = conversation_id
+
+    def _validate_user_data(self):
+        if not self.user_id or not self.collection_id:
+            raise ValueError(
+                ErrorMessages.MISSING_DATA(
+                    ["user_id", "collection_id"],
+                    "Service layer error."
+                )
+            )
         
     def _validate_conversation_id(self):
         if not self.conversation_id:
@@ -22,6 +25,8 @@ class ConversationService:
             )
 
     async def start(self):
+        self._validate_user_data()
+        
         # Initiate a new conversation, store the conversation id and return it.
         self.conversation_id = 1
 
