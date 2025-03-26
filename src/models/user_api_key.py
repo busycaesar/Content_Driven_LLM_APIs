@@ -6,8 +6,7 @@ from utils import ErrorMessages
 class UserAPIKey(db.Model):
     __tablename__ = "user_api_key"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(String(32), nullable=False, unique=True)
+    user_id = Column(String(32), primary_key=True, nullable=False, unique=True)
     api_key = Column(String(32), nullable=False, unique=True)
     created_on = Column(DateTime, nullable=False, default=func.now())
     modified_on = Column(DateTime, onupdate=func.now())
