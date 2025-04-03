@@ -7,3 +7,4 @@ class ConfigVars:
         This is the prompt template
         """;
         LLM_ID = 1
+        RELEVANT_CHUNKS_REQUIRED = 3
