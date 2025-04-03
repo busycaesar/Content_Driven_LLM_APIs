@@ -1,4 +1,4 @@
-from models import VectorStoreModel, UserContent, ContentPromptTemplate
+from models import VectorStoreModel, UserContent, ContentPromptTemplate, ContentLLM
 from utils import ConfigVars, ErrorMessages
 import uuid
 
@@ -59,8 +59,8 @@ class ContentService:
         # Store the content.
         vector_store.store_new_content(
             content,
-            ConfigVars.CHUNK_SIZE,
-            ConfigVars.CHUNK_OVERLAP
+            ConfigVars.DEFAULT.CHUNK_SIZE,
+            ConfigVars.DEFAULT.CHUNK_OVERLAP
         )
 
         # Store the collection id and user id in the user content table.
@@ -71,12 +71,15 @@ class ContentService:
         # Store the prompt template with the collection id.
         content_prompt_template = ContentPromptTemplate(
             self.collection_id,
-            ConfigVars.PROMPT_TEMPLATE
+            ConfigVars.DEFAULT.PROMPT_TEMPLATE
         )
 
         content_prompt_template.add()
 
         # Store the content llm with the collection id.
+        content_llm = ContentLLM(self.collection_id, ConfigVars.DEFAULT.LLM_ID)
+
+        content_llm.save()
     
         # Return the collection id.
         return self.collection_id
