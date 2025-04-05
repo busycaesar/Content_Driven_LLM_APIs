@@ -4,8 +4,8 @@ name: cd
 # This workflow is expected to run whenever the commited code is pushed or PR is raised to the Master branch!
 on:
   push:
-    branches:
-      - Master
+    tags:
+      - "v**"
 
 # This job is expected to run whenever the above condition is fulfilled!
 jobs:
@@ -32,7 +32,11 @@ jobs:
       - name: Build, Push
         env:
           DOCKERHUB_REPO: ${{ secrets.DOCKERHUB_USERNAME }}/content_driven_llm_apis
+          VERSION_TAG: ${{github.ref_name}}
         uses: docker/build-push-action@v5
         with:
+          context: ./backend
           push: true
-          tags: ${{env.DOCKERHUB_REPO}}:latest
+          tags: |
+            ${{env.DOCKERHUB_REPO}}:latest,
+            ${{env.DOCKERHUB_REPO}}:${{env.VERSION_TAG}}
