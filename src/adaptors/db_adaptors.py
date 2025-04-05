@@ -20,5 +20,9 @@ class DBAdaptor:
         with app.app_context():
             self.db.create_all()
 
+    def add_sample_data(self, app, seed_function):
+        with app.app_context():
+            seed_function()
+
     def __getattr__(self, name):
         return getattr(self.db, name)
