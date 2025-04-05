@@ -46,3 +46,19 @@ class Prompt(db.Model):
             raise ValueError(ErrorMessages.EXCEPTION(
                 f"saving the prompt. {str(e)}."
             )) from e
+        
+    def get_conversation(self):
+        try:
+            prompts = db.session.query(Prompt).filter_by(
+                conversation_id=self.conversation_id
+            ).order_by(Prompt.created_on.asc())
+
+            return [{
+                "prompt": prompt.user_prompt,
+                "response": prompt.response
+            } for prompt in prompts]
+            
+        except Exception as e:
+            raise ValueError(ErrorMessages.EXCEPTION(
+                f"getting conversation. {str(e)}."
+            )) from e

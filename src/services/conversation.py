@@ -116,7 +116,9 @@ class ConversationService:
     async def get(self):
         self._validate_conversation_id()
 
+        prompt = Prompt(self.conversation_id)
+
         # Get the prompt-response using the collection id and return it.
-        conversation = [{"prompt":"Who is Dev?","response":"Dev is a developer."}]
+        conversation = prompt.get_conversation()
 
         return conversation

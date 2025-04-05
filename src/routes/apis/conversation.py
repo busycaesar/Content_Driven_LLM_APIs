@@ -31,7 +31,15 @@ async def post():
 @conversation_apis.route("/<conversation_id>", methods=["GET"])
 async def get_conversation_id(conversation_id):
     try:
-        conversation_controller = ConversationController(conversation_id)
+        data = request.get_json()
+        api_key = data.get("api_key")
+        collection_id = data.get("collection_id")
+
+        conversation_controller = ConversationController(
+            api_key,
+            collection_id,
+            conversation_id
+        )
 
         conversation = await conversation_controller.get()
 

@@ -13,7 +13,7 @@ class ConversationController:
         
         self.api_key = api_key
         self.collection_id = collection_id
-        self.conversation_id = conversation_id
+        self.conversation_id = int(conversation_id)
 
         self.conversation_service = ConversationService(
             self.api_key,
