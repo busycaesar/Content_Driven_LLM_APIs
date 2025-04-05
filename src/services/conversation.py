@@ -1,27 +1,30 @@
 from utils import ErrorMessages, ConfigVars
 from adaptors import LLMAdaptor
 from services import ContentService
-from models import Conversation, VectorStoreModel, ContentPromptTemplate, ContentLLM, LLM, Prompt
+from models import Conversation, VectorStoreModel, ContentPromptTemplate, ContentLLM, LLM, Prompt, UserAPIKey
 
 class ConversationService:
-    def __init__(self, user_id=None, collection_id=None, conversation_id=None):
-        self.user_id = user_id
-        self.collection_id = collection_id
-        self.conversation_id = conversation_id
-
-    async def _validate_user_data(self):
-        if not self.user_id or not self.collection_id:
+    def __init__(self, api_key, collection_id, conversation_id=None):
+        if not api_key or not collection_id:
             raise ValueError(
                 ErrorMessages.MISSING_DATA(
-                    ["user_id", "collection_id"],
+                    ["api_key", "collection_id"],
                     "Service layer error."
                 )
             )
         
-        await ContentService.validate_content_ownership(
-            self.user_id,
-            self.collection_id
-        )
+        self.api_key = api_key
+        self.user_id = None
+        self.collection_id = collection_id
+        self.conversation_id = conversation_id
+
+    async def _get_user_id(self):
+        user_api_key = UserAPIKey(self.api_key)
+
+        self.user_id = user_api_key.get_user_id()
+
+        if not self.user_id:
+            raise ValueError(ErrorMessages.NOT_FOUND("Invalid API Key."))
         
     def _validate_conversation_id(self):
         if not self.conversation_id:
@@ -33,7 +36,12 @@ class ConversationService:
             )
 
     async def start(self):
-        await self._validate_user_data()
+        await self._get_user_id()
+
+        await ContentService.validate_content_ownership(
+            self.user_id,
+            self.collection_id
+        )
         
         # Initiate a new conversation, store the conversation id and return it.
         conversation = Conversation(self.collection_id)
@@ -43,6 +51,13 @@ class ConversationService:
         return self.conversation_id
 
     async def add_prompt(self, prompt):
+        await self._get_user_id()
+
+        await ContentService.validate_content_ownership(
+            self.user_id,
+            self.collection_id
+        )
+
         self._validate_conversation_id()
 
         if not prompt:
@@ -75,7 +90,7 @@ class ConversationService:
         # Get the model to be used for the content.
         content_llm = ContentLLM(self.collection_id)
         
-        llm_id = content_llm.get_llm_id()
+        llm_id = content_llm.get()
 
         llm = LLM.get(llm_id)
 
