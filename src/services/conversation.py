@@ -1,4 +1,7 @@
-from utils import ErrorMessages
+from utils import ErrorMessages, ConfigVars
+from adaptors import LLMAdaptor
+from services import ContentService
+from models import Conversation, VectorStoreModel, ContentPromptTemplate, ContentLLM, LLM, Prompt
 
 class ConversationService:
     def __init__(self, user_id=None, collection_id=None, conversation_id=None):
@@ -6,7 +9,7 @@ class ConversationService:
         self.collection_id = collection_id
         self.conversation_id = conversation_id
 
-    def _validate_user_data(self):
+    async def _validate_user_data(self):
         if not self.user_id or not self.collection_id:
             raise ValueError(
                 ErrorMessages.MISSING_DATA(
@@ -14,6 +17,11 @@ class ConversationService:
                     "Service layer error."
                 )
             )
+        
+        await ContentService.validate_content_ownership(
+            self.user_id,
+            self.collection_id
+        )
         
     def _validate_conversation_id(self):
         if not self.conversation_id:
@@ -25,10 +33,12 @@ class ConversationService:
             )
 
     async def start(self):
-        self._validate_user_data()
+        await self._validate_user_data()
         
         # Initiate a new conversation, store the conversation id and return it.
-        self.conversation_id = 1
+        conversation = Conversation(self.collection_id)
+        
+        self.conversation_id = conversation.save()
 
         return self.conversation_id
 
@@ -43,12 +53,48 @@ class ConversationService:
                 )
             )
         
-        # Get the relevant content using the collection id.
+        # In case of adding a prompt in existing conversation, the collection id would not be stored in the class.
+        if not self.collection_id:
+            self.collection_id = Conversation.get_collection_id(self.conversation_id)
 
-        # Get the response using the prompt and relevant chunk of data.
-        response = ""
+        # Get the relevant content using the collection id.
+        vector_store_model = VectorStoreModel(self.collection_id)
+
+        relevant_content = vector_store_model.get_relevant_content(
+            prompt,
+            ConfigVars.DEFAULT.RELEVANT_CHUNKS_REQUIRED
+        )
+
+        # Get the prompt template for the content.
+        content_prompt_template = ContentPromptTemplate(self.collection_id)
+
+        prompt_template = content_prompt_template.get()
+
+        print("prompt_template", prompt_template)
+
+        # Get the model to be used for the content.
+        content_llm = ContentLLM(self.collection_id)
+        
+        llm_id = content_llm.get_llm_id()
+
+        llm = LLM.get(llm_id)
+
+        # # Get the response using the prompt, relevant chunk of data, prompt template and model.
+        # response = LLMAdaptor.generate_response(
+        #     prompt,
+        #     relevant_content,
+        #     prompt_template,
+        #     llm
+        # )
+
+        response = "This is the response."
+
+        print("response",response)
 
         # Store the response into the database and return the response.
+        prompt = Prompt(self.conversation_id, prompt, response)
+
+        prompt.save()
 
         return response
 

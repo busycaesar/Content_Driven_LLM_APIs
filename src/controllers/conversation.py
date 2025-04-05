@@ -37,8 +37,6 @@ class ConversationController:
                     ["prompt"],
                     "Controller layer error."
             ))
-        
-        self._validate_user_data()
 
         if not self.conversation_id:
             await self._start()
@@ -47,9 +45,11 @@ class ConversationController:
 
         prompt_response = await self._add_prompt(prompt)
 
-        return prompt_response
+        return prompt_response, self.conversation_id
 
     async def _start(self):
+        self._validate_user_data()
+
         self.conversation_id = await self.conversation_service.start()
 
     async def _add_prompt(self, prompt):

@@ -19,9 +19,12 @@ async def post():
             conversation_id
         )
 
-        prompt_response = await conversation_controller.add(prompt)
+        prompt_response, conversation_id = await conversation_controller.add(prompt)
 
-        return jsonify(response(True, "Response sent", prompt_response)), 201
+        return jsonify(response(True, "Response sent", {
+            "response": prompt_response,
+            "conversation_id": conversation_id
+        })), 201
     except Exception as e:
         return jsonify(response(False, f"Error: {str(e)}")), 500
 
