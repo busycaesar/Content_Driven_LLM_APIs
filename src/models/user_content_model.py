@@ -40,7 +40,7 @@ class UserContent(db.Model):
             db.session.rollback()
             raise ValueError(ErrorMessages.EXCEPTION(
                 f"saving the user content's collection id. {str(e)}."
-            ))
+            )) from e
 
     def delete(self):
         try:
@@ -51,4 +51,4 @@ class UserContent(db.Model):
             db.session.rollback()
             raise ValueError(ErrorMessages.EXCEPTION(
                 f"deleting the user content's collection id. {str(e)}."
-            ))
+            )) from e

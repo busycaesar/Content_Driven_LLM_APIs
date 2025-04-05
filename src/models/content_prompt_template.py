@@ -33,7 +33,7 @@ class ContentPromptTemplate(db.Model):
             )
 
     # Store a new prompt template using the collection id.
-    def add(self):
+    def save(self):
         self._verify_prompt_template()
 
         try:
@@ -44,7 +44,7 @@ class ContentPromptTemplate(db.Model):
             db.session.rollback()
             raise ValueError(ErrorMessages.EXCEPTION(
                 f"adding the prompt template for the user content's. {str(e)}."
-            ))
+            )) from e
 
     # Update the stored prompt template using the collection id.
     def update(self):
@@ -57,11 +57,13 @@ class ContentPromptTemplate(db.Model):
             db.session.rollback()
             raise ValueError(ErrorMessages.EXCEPTION(
                 f"updating the prompt template for the user content's. {str(e)}."
-            ))
+            )) from e
 
     # Get the prompt template using the collection id.
-    def get_prompt_template(self):
-        data = db.session.query(ContentPromptTemplate).filter_by(collection_id=self.collection_id).first()
+    def get(self):
+        data = db.session.query(ContentPromptTemplate).filter_by(
+            collection_id=self.collection_id
+        ).first()
 
         self.prompt_template = data.prompt_template
 

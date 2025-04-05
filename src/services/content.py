@@ -74,7 +74,7 @@ class ContentService:
             ConfigVars.DEFAULT.PROMPT_TEMPLATE
         )
 
-        content_prompt_template.add()
+        content_prompt_template.save()
 
         # Store the content llm with the collection id.
         content_llm = ContentLLM(self.collection_id, ConfigVars.DEFAULT.LLM_ID)
