@@ -6,9 +6,10 @@ class LLMAdaptor:
 
     @staticmethod
     def generate_response(
-        prompt_template,
         prompt,
-        relevant_chunk_of_data
+        relevant_chunk_of_data,
+        prompt_template,
+        llm
     ):
         if not prompt or not relevant_chunk_of_data:
             raise ValueError("Prompt and Relevant Chunk of Data are not provided.")

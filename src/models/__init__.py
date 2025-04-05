@@ -8,3 +8,4 @@ from .prompt import Prompt
 from .user import User
 from .user_api_key import UserAPIKey
 from .db import db
+from .content_prompt_template import ContentPromptTemplate

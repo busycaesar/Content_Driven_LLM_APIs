@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker exec -it pgvector bash -c "psql -U llm_vectordb_user -d llm_vectordb_db -c 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;'"

@@ -6,9 +6,8 @@ from utils import ErrorMessages
 class UserContent(db.Model):
     __tablename__ = "user_content"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(String(32), nullable=False)
-    collection_id = Column(String(32), nullable=False)
+    collection_id = Column(String(32), primary_key=True, nullable=False, unique=True)
     created_on = Column(DateTime, nullable=False, default=func.now())
     modified_on = Column(DateTime, onupdate=func.now())
 
@@ -33,5 +32,23 @@ class UserContent(db.Model):
         return collection_ids
     
     def save(self):
-        db.session.add(self)
-        db.session.commit()
+        try:
+            db.session.add(self)
+            db.session.commit()
+
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(ErrorMessages.EXCEPTION(
+                f"saving the user content's collection id. {str(e)}."
+            )) from e
+
+    def delete(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(ErrorMessages.EXCEPTION(
+                f"deleting the user content's collection id. {str(e)}."
+            )) from e

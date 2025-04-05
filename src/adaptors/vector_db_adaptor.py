@@ -15,3 +15,10 @@ class VectorDBAdaptor:
 
     def store_document(self, content):
         self.vector_db.add_documents(content)
+
+    def get_relevant_chunks(self, string, number_of_chunks_required):
+        chunks = self.vector_db.similarity_search(string, number_of_chunks_required)
+
+        relevant_chunks = " ".join([chunk.page_content for chunk in chunks])
+
+        return relevant_chunks or ""
