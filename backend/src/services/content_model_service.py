@@ -1,5 +1,5 @@
 from utils import ErrorMessages
-from .content import ContentService
+from .content_service import ContentService
 
 class ContentModelService:
     def __init__(self, user_id, collection_id):

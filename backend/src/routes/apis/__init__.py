@@ -1,9 +1,9 @@
 from flask import Blueprint
 from routes.apis.user import user_apis
-from routes.apis.content import content_apis
+from routes.apis.content_api import content_apis
 from routes.apis.prompt_template import prompt_template_apis
 from routes.apis.llm import llm_apis
-from routes.apis.content_model import content_model_apis
+from routes.apis.content_model_api import content_model_apis
 from routes.apis.conversation import conversation_apis
 
 apis = Blueprint("apis", __name__)
