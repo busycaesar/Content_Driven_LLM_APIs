@@ -2,25 +2,24 @@ from utils import ErrorMessages
 from services import ConversationService
 
 class ConversationController:
-    def __init__(self, user_id=None, collection_id=None, conversation_id=None):
-        self.user_id = user_id
-        self.collection_id = collection_id
-        self.conversation_id = conversation_id
-
-        self.conversation_service = ConversationService(
-            self.user_id,
-            self.collection_id,
-            self.conversation_id
-        )
-        
-    def _validate_user_data(self):
-        if not self.user_id or not self.collection_id:
+    def __init__(self, api_key, collection_id, conversation_id=None):
+        if not api_key or not collection_id:
             raise ValueError(
                 ErrorMessages.MISSING_DATA(
-                    ["user_id", "collection_id"],
+                    ["api_key", "collection_id"],
                     "Controller layer error."
                 )
             )
+        
+        self.api_key = api_key
+        self.collection_id = collection_id
+        self.conversation_id = int(conversation_id)
+
+        self.conversation_service = ConversationService(
+            self.api_key,
+            self.collection_id,
+            self.conversation_id
+        )
 
     def _validate_conversation_id(self):
         if not self.conversation_id:
@@ -48,8 +47,6 @@ class ConversationController:
         return prompt_response, self.conversation_id
 
     async def _start(self):
-        self._validate_user_data()
-
         self.conversation_id = await self.conversation_service.start()
 
     async def _add_prompt(self, prompt):

@@ -32,12 +32,12 @@ class ContentLLM(db.Model):
                 )
             )
     
-    def get_llm_id(self):
+    def get(self):
         content_llm = db.session.query(ContentLLM).filter_by(
             collection_id=self.collection_id
         ).first()
 
-        return content_llm.llm_id if content_llm.llm_id else None
+        return content_llm.llm_id or None
 
     def save(self):
         try:

@@ -61,13 +61,8 @@ class ContentPromptTemplate(db.Model):
 
     # Get the prompt template using the collection id.
     def get(self):
-        data = db.session.query(ContentPromptTemplate).filter_by(
+        content_prompt_template = db.session.query(ContentPromptTemplate).filter_by(
             collection_id=self.collection_id
         ).first()
 
-        self.prompt_template = data.prompt_template
-
-        if not self.prompt_template:
-            raise ValueError(ErrorMessages.NOT_FOUND("Prompt template with collection id."))
-        
-        return self.prompt_template
+        return content_prompt_template.prompt_template or None
