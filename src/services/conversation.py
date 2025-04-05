@@ -85,24 +85,21 @@ class ConversationService:
 
         prompt_template = content_prompt_template.get()
 
-        print("prompt_template", prompt_template)
-
         # Get the model to be used for the content.
         content_llm = ContentLLM(self.collection_id)
         
         llm_id = content_llm.get()
 
-        llm = LLM.get(llm_id)
+        model_name = LLM.get(llm_id)
 
-        # # Get the response using the prompt, relevant chunk of data, prompt template and model.
-        # response = LLMAdaptor.generate_response(
-        #     prompt,
-        #     relevant_content,
-        #     prompt_template,
-        #     llm
-        # )
+        # Get the response using the prompt, relevant chunk of data, prompt template and model.
+        llm_adaptor = LLMAdaptor(model_name)
 
-        response = "This is the response."
+        response = llm_adaptor.generate_response(
+            prompt,
+            relevant_content,
+            prompt_template
+        )
 
         print("response",response)
 
