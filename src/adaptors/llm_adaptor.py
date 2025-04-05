@@ -1,20 +1,17 @@
 from langchain.prompts import PromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI
-from utils import EnvVars
+from utils import EnvVars, ErrorMessages
 
 class LLMAdaptor:
+    def __init__(self, model_name):
+        self.prompt_template = self._get_prompt_template()
+        self.llm = self._get_model(model_name)
 
-    @staticmethod
-    def generate_response(
-        prompt,
-        relevant_chunk_of_data,
-        prompt_template,
-        llm
-    ):
-        if not prompt or not relevant_chunk_of_data:
-            raise ValueError("Prompt and Relevant Chunk of Data are not provided.")
-        
-        prompt_template = PromptTemplate(
+        if not self.llm:
+            raise ValueError(ErrorMessages.NOT_FOUND("LLM through Model Name."))
+
+    def _get_prompt_template(self):
+        return PromptTemplate(
             input_variables=[
                 "prompt_template",
                 "prompt",
@@ -23,22 +20,42 @@ class LLMAdaptor:
             template= """
             {prompt_template}
 
-            Content: {relevant_chunk_of_data}
+            Relevant Content: {relevant_chunk_of_data}
 
             User's Question: {prompt}
             """
         )
 
-        if not EnvVars.GEMINI_API_KEYS: return
+    def _google_model(self, model_name):
+        if not EnvVars.GEMINI_API_KEYS:
+            raise ValueError(ErrorMessages.MISSING_DATA(["GEMINI_API_KEYS"]))
 
-        llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=EnvVars.GEMINI_API_KEYS)
+        return ChatGoogleGenerativeAI(
+            model=model_name,
+            google_api_key=EnvVars.GEMINI_API_KEYS
+        )
+
+    def _get_model(self, model_name):
+        if model_name == "gemini-1.5-flash":
+            return self._google_model(model_name)
+
+        return
+
+    def generate_response(
+        self,
+        prompt,
+        relevant_chunk_of_data,
+        prompt_template_text,
+    ):
+        if not prompt or not relevant_chunk_of_data or not prompt_template_text:
+            raise ValueError(ErrorMessages.MISSING_DATA(["prompt", "relevant_chunk_of_data", "prompt_template_text"]))
 
         # Chain the template and instance
-        chain = prompt_template | llm
+        chain = self.prompt_template | self.llm
 
         # Invoke the chain by passing the input variables of prompt
         response = chain.invoke({
-            "prompt_template":prompt_template,
+            "prompt_template":prompt_template_text,
             "prompt":prompt,
             "relevant_chunk_of_data": relevant_chunk_of_data
         })
