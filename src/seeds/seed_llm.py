@@ -1,7 +1,7 @@
 from models import LLM, db
 
 sample_llm_table_data = [
-    LLM(name="qwen2.5:3b")
+    LLM(name="gemini-1.5-flash")
 ]
 
 def seed_llm_table():
