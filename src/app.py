@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from routes import routes
 from models import db
+from seeds import seed_all_tables
 
 # Initiate a Flask application.
 app = Flask(__name__)
@@ -11,6 +12,8 @@ CORS(app, resources={r"/*": {"origins": [
     ]}})
 
 db.config_app(app)
+
+db.add_sample_data(app, seed_all_tables)
 
 # Register the blueprint of all the routes.
 # API calls for the assigned url prefix will be redirected to the routes.
