@@ -1,12 +1,5 @@
 import "./globals.css";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import Link from "next/link";
+import NavBar from "@/components/common/nav-bar";
 
 export const metadata = {
   title: "Create Next App",
@@ -17,22 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <div className="flex justify-between items-center bg-black p-4">
-          <Link href="/" className="text-2xl text-white">
-            Promplicity
-          </Link>
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <Link href="/about" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    About
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
+        <NavBar />
         <div className="flex flex-col min-h-screen">
           <main className="flex-grow my-4 md:mx-12 mx-8">{children}</main>
 
