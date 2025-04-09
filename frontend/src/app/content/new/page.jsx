@@ -1,7 +1,6 @@
 import React from "react";
 import { Textarea } from "@/components/ui/textarea";
-import Button from "@/components/common/button";
-import PageTitle from "@/components/common/pageTitle";
+import { Button, PageTitle } from "@/components/common";
 
 export default function newContent() {
   return (
