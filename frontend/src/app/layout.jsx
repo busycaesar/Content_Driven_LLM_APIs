@@ -1,5 +1,5 @@
 import "./globals.css";
-import NavBar from "@/components/common/nav-bar";
+import { NavBar } from "@/components/common";
 
 export const metadata = {
   title: "Promptlicity",

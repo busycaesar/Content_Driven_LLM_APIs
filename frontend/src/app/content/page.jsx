@@ -2,8 +2,7 @@
 
 import React from "react";
 import { useContentListController } from "@/controller";
-import Button from "@/components/common/button";
-import PageTitle from "@/components/common/pageTitle";
+import { Button, PageTitle } from "@/components/common";
 
 export default function Content() {
   const contents = useContentListController();
