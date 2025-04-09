@@ -2,14 +2,16 @@
 
 import React from "react";
 import { useContentListController } from "@/controller";
-import { Button } from "@/components/ui/button";
+import Button from "@/components/common/button";
+import PageTitle from "@/components/common/pageTitle";
 
 export default function Content() {
   const contents = useContentListController();
 
   return (
     <>
-      <Button className="my-2">Add Content</Button>
+      <Button href="/content/new">Add Content</Button>
+      <PageTitle>Stored Content</PageTitle>
       {contents?.length > 0 ? (
         contents?.map((content) => <div>{content}</div>)
       ) : (
