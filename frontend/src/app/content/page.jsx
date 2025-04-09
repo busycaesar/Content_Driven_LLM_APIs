@@ -2,13 +2,20 @@
 
 import React from "react";
 import { useContentListController } from "@/controller";
+import { Button, PageTitle } from "@/components/common";
 
 export default function Content() {
   const contents = useContentListController();
 
-  return contents?.length > 0 ? (
-    contents?.map((content) => <div>{content}</div>)
-  ) : (
-    <>No Content Stored.</>
+  return (
+    <>
+      <Button href="/content/new">Add Content</Button>
+      <PageTitle>Stored Content</PageTitle>
+      {contents?.length > 0 ? (
+        contents?.map((content) => <div>{content}</div>)
+      ) : (
+        <>No Content Stored.</>
+      )}
+    </>
   );
 }
