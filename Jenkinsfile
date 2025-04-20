@@ -7,5 +7,11 @@ pipeline {
       }
     }
 
+    stage('build docker image') {
+      steps {
+        sh 'docker build -t busycaesar/content_driven_llm_apis:jenkins .'
+      }
+    }
+
   }
 }
