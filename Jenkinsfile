@@ -9,7 +9,7 @@ pipeline {
 
     stage('build docker image') {
       steps {
-        sh 'docker build -t busycaesar/content_driven_llm_apis:jenkins .'
+        sh 'sudo docker build -t busycaesar/content_driven_llm_apis:jenkins .'
       }
     }
 
