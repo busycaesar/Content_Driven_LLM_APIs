@@ -9,19 +9,36 @@ class User(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     name = Column(String(20), nullable=False)
     email = Column(String(20), nullable=False, unique=True)
+    hashed_password = Column(String, nullable=False)
     created_on = Column(DateTime, nullable=False, default=func.now())
     modified_on = Column(DateTime, onupdate=func.now())
     is_active = Column(Boolean, default=True)
     is_delete = Column(Boolean, default=False)
 
-    def __init__(self, name, email):
-        if not name or not email:
+    def __init__(self, name, email, hashed_password):
+        if not name or not email or not hashed_password:
             raise ValueError(
                 ErrorMessages.MISSING_DATA(
-                    ["name", "email"],
+                    ["name", "email", "hashed_password"],
                     "Model layer error."
                 )
             )
-        
+
         self.name = name
         self.email = email
+        self.hashed_password = hashed_password
+
+    @staticmethod
+    def get_by_email(email):
+        return db.session.query(User).filter_by(email=email).first()
+
+    def save(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(ErrorMessages.EXCEPTION(
+                f"saving the user. {str(e)}."
+            )) from e

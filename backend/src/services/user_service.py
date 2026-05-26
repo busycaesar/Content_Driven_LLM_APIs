@@ -1,4 +1,7 @@
-from utils import ErrorMessages
+import jwt as pyjwt
+from werkzeug.security import generate_password_hash, check_password_hash
+from utils import ErrorMessages, EnvVars
+from models import User
 
 class UserService:
     def __init__(self, user_id):
@@ -20,12 +23,14 @@ class UserService:
                 )
             )
         
-        # Hash the password of the user.
-        
-        # Register the new user, generate jwt and return the jwt.
-        jwt = ""
+        hashed_password = generate_password_hash(password)
 
-        return jwt
+        user = User(name, email, hashed_password)
+        user.save()
+
+        token = pyjwt.encode({"user_id": user.id}, EnvVars.JWT_SECRET, algorithm="HS256")
+
+        return token
         
     @staticmethod
     async def validate_user(email, password):
@@ -37,15 +42,14 @@ class UserService:
                 )
             )
         
-        # Get the stored password of the user using the email.
-        stored_password = ""
+        user = User.get_by_email(email)
 
-        # Compare the store password with the received password to make sure that both matches.
-        
-        # Generate the jwt for the user and return it.
-        jwt = ""
+        if not user or not check_password_hash(user.hashed_password, password):
+            raise ValueError("Invalid credentials.")
 
-        return jwt
+        token = pyjwt.encode({"user_id": user.id}, EnvVars.JWT_SECRET, algorithm="HS256")
+
+        return token
 
     async def update_password(self, old_password, new_password):
         if not old_password or not new_password:

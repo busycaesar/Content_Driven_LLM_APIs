@@ -15,3 +15,6 @@ class EnvVars:
     
     # GEMINI
     GEMINI_API_KEYS = os.getenv("GEMINI_API_KEY")
+
+    # JWT
+    JWT_SECRET = os.getenv("JWT_SECRET")
