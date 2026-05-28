@@ -6,11 +6,11 @@
 
 ## Description
 
-PromptlicityAI is a platform that enables users to store and manage custom content, which can then be used to generate knowledge-based responses through API calls. With PromptlicityAI, you can easily store content in a structured way and retrieve relevant knowledge chunks based on prompts—without needing to understand the underlying architecture of Retrieval-Augmented Generation (RAG) applications or how frameworks like work. PromptlicityAI simplifies the process of managing and querying knowledge content, enabling seamless AI integration without the complexity of underlying systems.
+PromptlicityAI is a platform that enables users to store and manage custom content, which can then be used to generate knowledge-based responses through API calls. With PromptlicityAI, you can easily store content in a structured way and retrieve relevant knowledge chunks based on prompts—without needing to understand the underlying architecture of Retrieval-Augmented Generation (RAG) applications or how frameworks like LangChain work. PromptlicityAI simplifies the process of managing and querying knowledge content, enabling seamless AI integration without the complexity of underlying systems.
 
 ## Tech Stack
 
-- **Application**: Flask, LangChain,
+- **Application**: Flask, LangChain, SQLAlchemy
 - **Embedding and LLM**: Gemini
 - **Vector DB**: pgvector
 - **Deployment**: Docker
@@ -18,6 +18,7 @@ PromptlicityAI is a platform that enables users to store and manage custom conte
 ## Features
 
 - **Content Storage**: Store and manage custom content with ease.
+- **Authentication**: JWT-based authentication secures all dashboard endpoints; a separate API key grants external apps access to query stored content.
 - **API Access**: Generate API keys to retrieve knowledge-based responses using the stored content.
 - **User-Friendly Interface**: A simple dashboard where users can manage their content and API keys, making it easy to integrate and retrieve responses from stored knowledge.
 - **No Technical Overhead**: Users don’t need to know the complex processes of how knowledge is stored, chunks are retrieved, or how to work with large language models (LLMs) for generating responses.
