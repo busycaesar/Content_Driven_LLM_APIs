@@ -68,7 +68,7 @@ class UserAPIKey(db.Model):
             )) from e
 
     @staticmethod
-    def delete_for_user(user_id):
+    def delete_by_user_id(user_id):
         try:
             record = db.session.query(UserAPIKey).filter_by(user_id=user_id).first()
             
