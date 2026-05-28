@@ -1,6 +1,6 @@
 from .db import db
 from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.sql import func
+from datetime import datetime
 from utils import ErrorMessages
 
 class ContentLLM(db.Model):
@@ -8,8 +8,8 @@ class ContentLLM(db.Model):
 
     collection_id = Column(String(32), primary_key=True, nullable=False,unique=True)
     llm_id = Column(Integer, nullable=False)
-    created_on = Column(DateTime, nullable=False, default=func.now())
-    modified_on = Column(DateTime, onupdate=func.now())
+    created_on = Column(DateTime, nullable=False, default=datetime.utcnow)
+    modified_on = Column(DateTime, onupdate=datetime.utcnow)
 
     def __init__(self, collection_id, llm_id=None):
         if not collection_id:
@@ -31,11 +31,12 @@ class ContentLLM(db.Model):
                     "Model layer error."
                 )
             )
-    
+
+    def _get_record(self):
+        return db.session.query(ContentLLM).filter_by(collection_id=self.collection_id).first()
+
     def get(self):
-        content_llm = db.session.query(ContentLLM).filter_by(
-            collection_id=self.collection_id
-        ).first()
+        content_llm = self._get_record()
 
         return content_llm.llm_id or None
 
@@ -54,7 +55,11 @@ class ContentLLM(db.Model):
         
     def delete(self):
         try:
-            db.session.delete(self)
+            record = self._get_record()
+
+            if not record: return
+            
+            db.session.delete(record)
             db.session.commit()
 
         except Exception as e:

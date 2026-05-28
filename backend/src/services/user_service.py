@@ -1,7 +1,7 @@
 import jwt as pyjwt
 from werkzeug.security import generate_password_hash, check_password_hash
 from utils import ErrorMessages, EnvVars
-from models import User, UserAPIKey, UserContent, ContentLLM, ContentPromptTemplate, VectorStoreModel, db
+from models import User, UserAPIKey, UserContent, ContentLLM, ContentPromptTemplate, VectorStoreModel
 
 class UserService:
     def __init__(self, user_id):
@@ -26,6 +26,7 @@ class UserService:
         hashed_password = generate_password_hash(password)
 
         user = User(name, email, hashed_password)
+
         user.save()
 
         token = pyjwt.encode({"user_id": user.id}, EnvVars.JWT_SECRET, algorithm="HS256")
@@ -68,14 +69,7 @@ class UserService:
         if not check_password_hash(user.hashed_password, old_password):
             raise ValueError("Current password is incorrect.")
 
-        try:
-            user.hashed_password = generate_password_hash(new_password)
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            raise ValueError(ErrorMessages.EXCEPTION(
-                f"updating the user password. {str(e)}."
-            )) from e
+        user.update_password(generate_password_hash(new_password))
 
     async def get_user(self):
         user = User.get_by_id(self.user_id)
@@ -94,24 +88,15 @@ class UserService:
 
         for collection_id in collection_ids:
             VectorStoreModel(collection_id).delete()
+            ContentLLM(collection_id).delete()
+            ContentPromptTemplate(collection_id).delete()
+            UserContent(self.user_id, collection_id).delete()
 
-            content_llm = db.session.query(ContentLLM).filter_by(collection_id=collection_id).first()
-            if content_llm:
-                content_llm.delete()
-
-            content_prompt_template = db.session.query(ContentPromptTemplate).filter_by(collection_id=collection_id).first()
-            if content_prompt_template:
-                content_prompt_template.delete()
-
-            user_content = db.session.query(UserContent).filter_by(collection_id=collection_id).first()
-            if user_content:
-                user_content.delete()
-
-        user_api_key = db.session.query(UserAPIKey).filter_by(user_id=self.user_id).first()
-        if user_api_key:
-            user_api_key.delete()
+        UserAPIKey.delete_by_user_id(self.user_id)
 
         user = User.get_by_id(self.user_id)
+        
         if not user:
             raise ValueError("User not found.")
+        
         user.delete()

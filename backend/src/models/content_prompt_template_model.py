@@ -1,6 +1,6 @@
 from .db import db
 from sqlalchemy import Column, Text, DateTime, String
-from sqlalchemy.sql import func
+from datetime import datetime
 from utils import ErrorMessages
 
 class ContentPromptTemplate(db.Model):
@@ -8,8 +8,8 @@ class ContentPromptTemplate(db.Model):
 
     collection_id = Column(String(32), primary_key=True, nullable=False,unique=True)
     prompt_template = Column(Text, nullable=False)
-    created_on = Column(DateTime, nullable=False, default=func.now())
-    modified_on = Column(DateTime, onupdate=func.now())
+    created_on = Column(DateTime, nullable=False, default=datetime.utcnow)
+    modified_on = Column(DateTime, onupdate=datetime.utcnow)
 
     def __init__(self, collection_id, prompt_template=None):
         if not collection_id:
@@ -31,6 +31,9 @@ class ContentPromptTemplate(db.Model):
                     "Model layer error."
                 )
             )
+
+    def _get_record(self):
+        return db.session.query(ContentPromptTemplate).filter_by(collection_id=self.collection_id).first()
 
     # Store a new prompt template using the collection id.
     def save(self):
@@ -69,7 +72,11 @@ class ContentPromptTemplate(db.Model):
 
     def delete(self):
         try:
-            db.session.delete(self)
+            record = self._get_record()
+            
+            if not record: return
+            
+            db.session.delete(record)
             db.session.commit()
 
         except Exception as e:

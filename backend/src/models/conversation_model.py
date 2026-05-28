@@ -1,6 +1,6 @@
 from .db import db
 from sqlalchemy import Column, Integer, DateTime, String
-from sqlalchemy.sql import func
+from datetime import datetime
 from utils import ErrorMessages
 
 class Conversation(db.Model):
@@ -8,7 +8,7 @@ class Conversation(db.Model):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     collection_id = Column(String(32), nullable=False)
-    created_on = Column(DateTime, nullable=False, default=func.now())
+    created_on = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     def __init__(self, collection_id):
         if not collection_id:

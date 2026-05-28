@@ -1,6 +1,6 @@
 from .db import db
 from sqlalchemy import Column, Integer, String, Text, DateTime
-from sqlalchemy.sql import func
+from datetime import datetime
 from utils import ErrorMessages
 
 class Prompt(db.Model):
@@ -10,7 +10,7 @@ class Prompt(db.Model):
     conversation_id = Column(Integer, nullable=False)
     user_prompt = Column(Text, nullable=False)
     response = Column(Text, nullable=False)
-    created_on = Column(DateTime, nullable=False, default=func.now())
+    created_on = Column(DateTime, nullable=False, default=datetime.utcnow)
  
     def __init__(self, conversation_id, user_prompt=None, response=None):
         if not conversation_id:

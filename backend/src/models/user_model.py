@@ -1,6 +1,6 @@
 from .db import db
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
-from sqlalchemy.sql import func
+from datetime import datetime
 from utils import ErrorMessages
 
 class User(db.Model):
@@ -10,8 +10,8 @@ class User(db.Model):
     name = Column(String(20), nullable=False)
     email = Column(String(20), nullable=False, unique=True)
     hashed_password = Column(String, nullable=False)
-    created_on = Column(DateTime, nullable=False, default=func.now())
-    modified_on = Column(DateTime, onupdate=func.now())
+    created_on = Column(DateTime, nullable=False, default=datetime.utcnow)
+    modified_on = Column(DateTime, onupdate=datetime.utcnow)
     is_active = Column(Boolean, default=True)
     is_delete = Column(Boolean, default=False)
 
@@ -35,6 +35,17 @@ class User(db.Model):
     @staticmethod
     def get_by_email(email):
         return db.session.query(User).filter_by(email=email).first()
+
+    def update_password(self, hashed_password):
+        try:
+            self.hashed_password = hashed_password
+            db.session.commit()
+
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(ErrorMessages.EXCEPTION(
+                f"updating the user password. {str(e)}."
+            )) from e
 
     def save(self):
         try:

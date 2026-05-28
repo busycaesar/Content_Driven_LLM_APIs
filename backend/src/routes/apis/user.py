@@ -9,7 +9,6 @@ user_apis = Blueprint("user_apis", __name__)
 async def post_register():
     try:
         data = request.get_json()
-
         name = data.get("name")
         email = data.get("email")
         password = data.get("password")
@@ -24,7 +23,6 @@ async def post_register():
 async def post_validate():
     try:
         data = request.get_json()
-
         email = data.get("email")
         password = data.get("password")
 
@@ -40,7 +38,6 @@ async def patch_password():
     try:
         user_id = g.user_id
         data = request.get_json()
-
         old_password = data.get("old_password")
         new_password = data.get("new_password")
 

@@ -1,6 +1,6 @@
 from .db import db
 from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.sql import func
+from datetime import datetime
 from utils import ErrorMessages
 
 class UserContent(db.Model):
@@ -8,8 +8,8 @@ class UserContent(db.Model):
 
     user_id = Column(String(32), nullable=False)
     collection_id = Column(String(32), primary_key=True, nullable=False, unique=True)
-    created_on = Column(DateTime, nullable=False, default=func.now())
-    modified_on = Column(DateTime, onupdate=func.now())
+    created_on = Column(DateTime, nullable=False, default=datetime.utcnow)
+    modified_on = Column(DateTime, onupdate=datetime.utcnow)
 
     def __init__(self, user_id, collection_id):
         if not user_id or not collection_id:
@@ -22,6 +22,9 @@ class UserContent(db.Model):
 
         self.user_id = user_id
         self.collection_id = collection_id
+
+    def _get_record(self):
+        return db.session.query(UserContent).filter_by(collection_id=self.collection_id).first()
 
     @staticmethod
     def get_all_collection_id(user_id):
@@ -44,7 +47,11 @@ class UserContent(db.Model):
 
     def delete(self):
         try:
-            db.session.delete(self)
+            record = self._get_record()
+            
+            if not record: return
+
+            db.session.delete(record)
             db.session.commit()
 
         except Exception as e:
