@@ -29,6 +29,10 @@ class User(db.Model):
         self.hashed_password = hashed_password
 
     @staticmethod
+    def get_by_id(user_id):
+        return db.session.query(User).filter_by(id=user_id).first()
+
+    @staticmethod
     def get_by_email(email):
         return db.session.query(User).filter_by(email=email).first()
 
@@ -41,4 +45,15 @@ class User(db.Model):
             db.session.rollback()
             raise ValueError(ErrorMessages.EXCEPTION(
                 f"saving the user. {str(e)}."
+            )) from e
+
+    def delete(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(ErrorMessages.EXCEPTION(
+                f"deleting the user. {str(e)}."
             )) from e

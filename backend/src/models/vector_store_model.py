@@ -38,3 +38,6 @@ class VectorStoreModel:
 
     def get_relevant_content(self, string, number_of_chunks_required):
         return self.vector_store.get_relevant_chunks(string, number_of_chunks_required)
+
+    def delete(self):
+        self.vector_store.delete_collection()

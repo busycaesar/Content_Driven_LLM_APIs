@@ -22,3 +22,6 @@ class VectorDBAdaptor:
         relevant_chunks = " ".join([chunk.page_content for chunk in chunks])
 
         return relevant_chunks or ""
+
+    def delete_collection(self):
+        self.vector_db.delete_collection()

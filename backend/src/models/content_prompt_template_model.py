@@ -66,3 +66,14 @@ class ContentPromptTemplate(db.Model):
         ).first()
 
         return content_prompt_template.prompt_template or None
+
+    def delete(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(ErrorMessages.EXCEPTION(
+                f"deleting the content prompt template. {str(e)}."
+            )) from e

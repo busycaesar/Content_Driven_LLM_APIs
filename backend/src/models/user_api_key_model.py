@@ -50,3 +50,14 @@ class UserAPIKey(db.Model):
         ).first()
 
         return user_api_key.user_id or None
+
+    def delete(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+
+        except Exception as e:
+            db.session.rollback()
+            raise ValueError(ErrorMessages.EXCEPTION(
+                f"deleting the user api key. {str(e)}."
+            )) from e
