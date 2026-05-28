@@ -1,14 +1,15 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from routes.response import response
+from routes.middleware import require_auth
 from controllers import ContentController
 
 content_apis = Blueprint("content_apis", __name__)
 
 @content_apis.route("/", methods=["POST"])
+@require_auth
 async def post():
     try:
-        # Get user id from jwt token.
-        user_id = 1
+        user_id = g.user_id
         data = request.get_json()
         content = data.get("content")
 
@@ -21,10 +22,10 @@ async def post():
         return jsonify(response(False, f"Error: {str(e)}")), 500
 
 @content_apis.route("/", methods=["GET"])
+@require_auth
 async def get():
     try:
-        # Get user id from jwt token.
-        user_id = 1
+        user_id = g.user_id
 
         content_controller = ContentController(user_id)
 
@@ -35,10 +36,10 @@ async def get():
         return jsonify(response(False, f"Error: {str(e)}")), 500
 
 @content_apis.route("/<collection_id>", methods=["GET"])
+@require_auth
 async def get_collection_id(collection_id):
     try:
-        # Get user id from jwt token.
-        user_id = 1
+        user_id = g.user_id
 
         content_controller = ContentController(user_id, collection_id)
 
@@ -49,10 +50,10 @@ async def get_collection_id(collection_id):
         return jsonify(response(False, f"Error: {str(e)}")), 500
     
 @content_apis.route("/<collection_id>", methods=["PUT"])
+@require_auth
 async def put_collection_id(collection_id):
     try:
-        # Get user id from jwt token.
-        user_id = 1
+        user_id = g.user_id
         data = request.get_json()
         content = data.get("content")
         
@@ -65,10 +66,10 @@ async def put_collection_id(collection_id):
         return jsonify(response(False, f"Error: {str(e)}")), 500
     
 @content_apis.route("/<collection_id>", methods=["DELETE"])
+@require_auth
 async def delete_collection_id(collection_id):
     try:
-        # Get user id from jwt token.
-        user_id = 1
+        user_id = g.user_id
 
         content_controller = ContentController(user_id, collection_id)
 

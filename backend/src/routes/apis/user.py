@@ -1,5 +1,6 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from routes.response import response
+from routes.middleware import require_auth
 from controllers import UserController
 
 user_apis = Blueprint("user_apis", __name__)
@@ -34,10 +35,10 @@ async def post_validate():
         return jsonify(response(False, f"Error: {str(e)}")), 500
 
 @user_apis.route("/password", methods=["PATCH"])
+@require_auth
 async def patch_password():
     try:
-        # Get user id from jwt token.
-        user_id = 1
+        user_id = g.user_id
         data = request.get_json()
 
         old_password = data.get("old_password")
@@ -52,10 +53,10 @@ async def patch_password():
         return jsonify(response(False, f"Error: {str(e)}")), 500
     
 @user_apis.route("/", methods=["GET"])
+@require_auth
 async def get():
     try:
-        # Get user id from jwt token.
-        user_id = 1
+        user_id = g.user_id
 
         user_controller = UserController(user_id)
 
@@ -66,10 +67,10 @@ async def get():
         return jsonify(response(False, f"Error: {str(e)}")), 500
     
 @user_apis.route("/", methods=["DELETE"])
+@require_auth
 async def delete():
     try:
-        # Get user id from jwt token.
-        user_id = 1
+        user_id = g.user_id
 
         user_controller = UserController(user_id)
 

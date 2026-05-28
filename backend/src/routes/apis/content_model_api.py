@@ -1,14 +1,15 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from routes.response import response
+from routes.middleware import require_auth
 from controllers import ContentModelController
 
 content_model_apis = Blueprint("content_model_apis", __name__)
 
 @content_model_apis.route("/<collection_id>", methods=["PUT"])
+@require_auth
 async def put_collection_id(collection_id):
     try:
-        # Get user id from jwt token.
-        user_id = 1
+        user_id = g.user_id
         data = request.get_json()
         model_id = data.get("model_id")
 
@@ -21,10 +22,10 @@ async def put_collection_id(collection_id):
         return jsonify(response(False, f"Error: {str(e)}")), 500
 
 @content_model_apis.route("/<collection_id>", methods=["GET"])
+@require_auth
 async def get_collection_id(collection_id):
     try:
-        # Get user id from jwt token.
-        user_id = 1
+        user_id = g.user_id
 
         content_model_controller = ContentModelController(user_id, collection_id)
 
