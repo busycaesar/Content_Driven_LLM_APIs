@@ -92,7 +92,7 @@ class UserService:
             ContentPromptTemplate(collection_id).delete()
             UserContent(self.user_id, collection_id).delete()
 
-        UserAPIKey.delete_for_user(self.user_id)
+        UserAPIKey.delete_by_user_id(self.user_id)
 
         user = User.get_by_id(self.user_id)
         
